@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using CSync.Extensions;
@@ -44,7 +44,7 @@ namespace CentralConfig
     {
         private const string modGUID = "impulse.CentralConfig";
         private const string modName = "CentralConfig";
-        private const string modVersion = "0.16.1";
+        private const string modVersion = "0.16.2";
         public static Harmony harmony = new Harmony(modGUID);
 
         public ManualLogSource mls;
@@ -112,8 +112,8 @@ namespace CentralConfig
             harmony.PatchAll(typeof(FixTimeUntilDeadlineonDC)); // Disconnect (Postfix)
 
             // Dungeon Generation
-            harmony.PatchAll(typeof(NewDungeonGenerator)); // GenerateNewFloor (Prefix)
-            harmony.PatchAll(typeof(InnerGenerateWithRetries)); // InnerGenerate (Prefix)
+            // harmony.PatchAll(typeof(NewDungeonGenerator)); // GenerateNewFloor (Prefix)
+            // harmony.PatchAll(typeof(InnerGenerateWithRetries)); // InnerGenerate (Prefix)
 
             // Scan Nodes
             harmony.PatchAll(typeof(IncreaseNodeDistanceOnShipAndMain)); // GenerateNewFloor (Postfix)
