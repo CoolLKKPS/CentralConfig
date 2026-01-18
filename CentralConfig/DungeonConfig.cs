@@ -1,4 +1,4 @@
-﻿using BepInEx.Configuration;
+using BepInEx.Configuration;
 using CSync.Extensions;
 using CSync.Lib;
 using DunGen;
@@ -461,7 +461,7 @@ namespace CentralConfig
                     // CentralConfig.instance.mls.LogInfo($"DungeonFlowType {i}: ID = {LevelManager.CurrentExtendedLevel.SelectableLevel.dungeonFlowTypes[i].id}, Rarity = {LevelManager.CurrentExtendedLevel.SelectableLevel.dungeonFlowTypes[i].rarity}");
                 }
 
-                System.Random seededRandom = new System.Random(StartOfRound.Instance.randomMapSeed - 69);
+                System.Random seededRandom = new System.Random(StartOfRound.Instance.randomMapSeed);
                 int DungeonID = __instance.GetRandomWeightedIndex(list.ToArray(), seededRandom);
                 // CentralConfig.instance.mls.LogInfo($"Selected DungeonID: {DungeonID}");
 
@@ -494,8 +494,8 @@ namespace CentralConfig
                 DungeonShuffler.lastdungeon = dungeon;
             }
 
-            __instance.dungeonGenerator.Generator.ShouldRandomizeSeed = false;
-            __instance.dungeonGenerator.Generator.Seed = StartOfRound.Instance.randomMapSeed + 420;
+            // __instance.dungeonGenerator.Generator.ShouldRandomizeSeed = false;
+            // __instance.dungeonGenerator.Generator.Seed = StartOfRound.Instance.randomMapSeed;
 
             float NewMultiplier = LevelManager.CurrentExtendedLevel.SelectableLevel.factorySizeMultiplier;
             if (CentralConfig.SyncConfig.DoDunSizeOverrides)
@@ -591,7 +591,7 @@ namespace CentralConfig
                     __instance.dungeonGenerator.Generate();
                     TileCounter.CountTiles();
                     __instance.dungeonGenerator.Generator.Cancel();
-                    __instance.dungeonGenerator.Generator.Seed = StartOfRound.Instance.randomMapSeed + 420 - InnerGenerateWithRetries.RetryCounter * 5;
+                    __instance.dungeonGenerator.Generator.Seed = StartOfRound.Instance.randomMapSeed;
                     __instance.dungeonGenerator.Generator.LengthMultiplier = NewMultiplier;
                     CentralConfig.instance.mls.LogInfo("Attempt # " + TileCounter.CallNumber);
                 }
@@ -725,7 +725,7 @@ namespace CentralConfig
                 RetryCounter++;
                 return true;
             }
-            __instance.Seed = StartOfRound.Instance.randomMapSeed + 420 - RetryCounter * 5;
+            __instance.Seed = StartOfRound.Instance.randomMapSeed;
             // CentralConfig.instance.mls.LogInfo("Seed: " + __instance.Seed);
 
             if (RetryCounter >= CentralConfig.SyncConfig.UnShrankDungenTries)
