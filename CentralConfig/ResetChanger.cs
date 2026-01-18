@@ -40,17 +40,20 @@ namespace CentralConfig
             public static bool WasLastHost = false;
             static void Prefix()
             {
-                if (NetworkManager.Singleton.IsHost)
+                if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
                     WasLastHost = true;
                 else
                     WasLastHost = false;
             }
             static void Postfix()
             {
-                if (WasLastHost)
-                    CentralConfig.instance.mls.LogInfo("You hosted last game");
-                else
-                    CentralConfig.instance.mls.LogInfo("You did not host last game");
+                if (CentralConfig.instance != null)
+                {
+                    if (WasLastHost)
+                        CentralConfig.instance.mls.LogInfo("You hosted last game");
+                    else
+                        CentralConfig.instance.mls.LogInfo("You did not host last game");
+                }
                 if (WasLastHost)
                 {
                     foreach (ExtendedLevel level in AllLevels)
@@ -90,21 +93,25 @@ namespace CentralConfig
                     {
                         if (CentralConfig.SyncConfig.ScrapShuffle)
                         {
-                            ES3.Save("ScrapAppearanceString", ScrapAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
+                            if (GameNetworkManager.Instance != null)
+                                ES3.Save("ScrapAppearanceString", ScrapAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
                             ScrapAppearanceString.Clear();
                         }
                         if (CentralConfig.SyncConfig.EnemyShuffle)
                         {
-                            ES3.Save("EnemyAppearanceString", EnemyAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
+                            if (GameNetworkManager.Instance != null)
+                                ES3.Save("EnemyAppearanceString", EnemyAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
                             EnemyAppearanceString.Clear();
                         }
                         if (CentralConfig.SyncConfig.DungeonShuffler)
                         {
-                            ES3.Save("DungeonAppearanceString", DungeonAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
+                            if (GameNetworkManager.Instance != null)
+                                ES3.Save("DungeonAppearanceString", DungeonAppearanceString, GameNetworkManager.Instance.currentSaveFileName);
                             DungeonAppearanceString.Clear();
                             if (LastGlorp != -1)
                             {
-                                ES3.Save("LastGlorp", LastGlorp, GameNetworkManager.Instance.currentSaveFileName);
+                                if (GameNetworkManager.Instance != null)
+                                    ES3.Save("LastGlorp", LastGlorp, GameNetworkManager.Instance.currentSaveFileName);
                                 LastGlorp = -1;
                             }
                         }
@@ -127,7 +134,8 @@ namespace CentralConfig
                 }
                 IncreaseHiveValue.Counter = 0;
 
-                CentralConfig.instance.mls.LogInfo("Reset enemy/scrap lists for all moons.");
+                if (CentralConfig.instance != null)
+                    CentralConfig.instance.mls.LogInfo("Reset enemy/scrap lists for all moons.");
             }
         }
     }
