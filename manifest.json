@@ -1,0 +1,12 @@
+{
+  "name": "CentralConfig_ForkForMe",
+  "version_number": "0.16.4",
+  "website_url": "https://github.com/CoolLKKPS/CentralConfig",
+  "description": "Nerd mod for configuring (almost) EVERYTHING.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2304",
+    "Sigurd-CSync-5.0.1",
+    "IAmBatby-LethalLevelLoader-1.6.8",
+    "Evaisa-LethalLib-1.1.1"
+  ]
+}

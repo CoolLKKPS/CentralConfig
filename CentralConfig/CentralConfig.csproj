@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" PrivateAssets="all" Version="1.0.8" />
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2">
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -21,9 +21,8 @@
     <PackageReference Include="LethalCompany.GameLibs.Steam" Version="73.0.0-ngd.0" />
     <PackageReference Include="UnityEngine.Modules" IncludeAssets="compile" Version="2022.3.62" />
     <PackageReference Include="Sigurd.BepInEx.CSync" Version="5.0.1" />
-    <PackageReference Include="IAmBatby.LethalLevelLoader" Version="1.3.14" />
     <PackageReference Include="Evaisa.LethalLib" Version="1.1.1" />
-    <PackageReference Include="mrov.WeatherRegistry" Version="0.7.5" Publicize="true" PrivateAssets="true" />
+    <PackageReference Include="mrov.WeatherRegistry" Version="0.8.5" PrivateAssets="true" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +30,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\AdiBTW-Loadstone\com.adibtw.loadstone.dll</HintPath>
     </Reference>
-    <Reference Include="Diversity Remastered" Publicize="true">
+    <Reference Include="Diversity Remastered">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\IntegrityChaos-Diversity\Diversity Remastered.dll</HintPath>
     </Reference>
     <Reference Include="FootballEntity">
@@ -42,6 +41,9 @@
     </Reference>
     <Reference Include="LethalBestiary">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\TheWeavers-LethalBestiary\LethalBestiary\LethalBestiary.dll</HintPath>
+    </Reference>
+    <Reference Include="LethalLevelLoader">
+      <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\IAmBatby-LethalLevelLoader\LethalLevelLoader.dll</HintPath>
     </Reference>
     <Reference Include="LethalUtilities" Publicize="true">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\kyxino-LethalUtilities\LethalUtilities.dll</HintPath>
@@ -58,7 +60,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
