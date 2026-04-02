@@ -218,9 +218,7 @@ namespace CentralConfig
                         string enemyname = CauterizeString(enemyType.enemyName);
                         if (enemyname == EnemyName)
                         {
-                            SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                            newEnemy.enemyType = enemyType;
-                            newEnemy.rarity = Rarity;
+                            SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(enemyType, Rarity);
                             returnList.Add(newEnemy);
                             added = true;
                             // CentralConfig.instance.mls.LogMessage($"Added enemy {enemyType.enemyName} with rarity {Rarity} from string {EnemyName}");
@@ -243,9 +241,7 @@ namespace CentralConfig
                                     string headerText = CauterizeString(enemyScanNode.headerText);
                                     if (headerText == EnemyName)
                                     {
-                                        SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                                        newEnemy.enemyType = enemyType;
-                                        newEnemy.rarity = Rarity;
+                                        SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(enemyType, Rarity);
                                         returnList.Add(newEnemy);
                                         added = true;
                                         // CentralConfig.instance.mls.LogMessage($"Added enemy {enemyType.enemyName} with rarity {Rarity} from scan node name {EnemyName}");
@@ -340,15 +336,12 @@ namespace CentralConfig
 
                 if (LastAppearance == 0)
                 {
-                    SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                    newEnemy.enemyType = enemy.enemyType;
-                    newEnemy.rarity = enemy.rarity;
+                    SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(enemy.enemyType, enemy.rarity);
                     returnList.Add(newEnemy);
                 }
                 else
                 {
-                    SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                    newEnemy.enemyType = enemy.enemyType;
+                    SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(enemy.enemyType, enemy.rarity);
                     if (MiscConfig.CreateMiscConfig.EnemyShufflerPercent && !(enemy.rarity < 0 && MiscConfig.CreateMiscConfig.RolloverNegatives))
                     {
                         newEnemy.rarity = (int)Math.Round((LastAppearance * (enemy.rarity * (multiplier / 100f))) + enemy.rarity);
@@ -443,17 +436,15 @@ namespace CentralConfig
                         {
                             if (random.Next(100) < chanceToReplace) // the enemy is only replaced if the chance to replace is greater than the random synced value from 0 to 99
                             {
-                                SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                                newEnemy.enemyType = GetEnemyTypeByName(replacementName); // method to check all enemyTypes and get the one with the name of the replacement, then sets the new enemies' enemyType to the replacements
+                                EnemyType replacementEnemyType = GetEnemyTypeByName(replacementName);
+                                int newRarity = (rarityReplacement != -1) ? rarityReplacement : enemy.rarity;
+                                SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(replacementEnemyType, newRarity);
 
                                 SuccessReplacementLogMessage = $"Replaced enemy: {originalName} with {replacementName}";
-
                                 if (rarityReplacement != -1)
                                 {
-                                    newEnemy.rarity = rarityReplacement; // if the rarityReplacement is set, it will use that
                                     SuccessReplacementLogMessage += $", using rarity override of {rarityReplacement}.";
                                 }
-                                else
                                 {
                                     newEnemy.rarity = enemy.rarity; // uses the same rarity
                                     SuccessReplacementLogMessage += $", using the original enemy rarity of {enemy.rarity}.";
@@ -491,9 +482,7 @@ namespace CentralConfig
             {
                 if (!replacedEnemies.Contains(CauterizeString(enemy.enemyType.enemyName))) // if it wasn't replaced by another enemy
                 {
-                    SpawnableEnemyWithRarity oldEnemy = new SpawnableEnemyWithRarity();
-                    oldEnemy.enemyType = enemy.enemyType; // add it as is
-                    oldEnemy.rarity = enemy.rarity; // same
+                    SpawnableEnemyWithRarity oldEnemy = new SpawnableEnemyWithRarity(enemy.enemyType, enemy.rarity);
                     returnList.Add(oldEnemy); // yeah its added to the returnList untouched
                     // CentralConfig.instance.mls.LogInfo("Added non replaced enemy: " + oldEnemy.enemyType.enemyName);
                 }
@@ -548,9 +537,7 @@ namespace CentralConfig
                         string cauterizedOGName = CauterizeString(EnemyName);
                         if (cauterizedEnemy == cauterizedOGName) // if the entry matches an original name
                         {
-                            SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity();
-                            newEnemy.enemyType = GetEnemyTypeByName(EnemyName); // method to check all enemyTypes and get the one with the name of the replacement, then sets the new enemies' enemyType to the replacements
-                            newEnemy.rarity = (int)(enemy.rarity * multiplier);
+                            SpawnableEnemyWithRarity newEnemy = new SpawnableEnemyWithRarity(GetEnemyTypeByName(EnemyName), (int)(enemy.rarity * multiplier));
                             returnList.Add(newEnemy); // adds this new enemy to the returnList
                             handledEnemies.Add(CauterizeString(EnemyName));
                             handled = true;
@@ -572,9 +559,7 @@ namespace CentralConfig
             {
                 if (!handledEnemies.Contains(CauterizeString(enemy.enemyType.enemyName))) // if it wasn't handled already
                 {
-                    SpawnableEnemyWithRarity oldEnemy = new SpawnableEnemyWithRarity();
-                    oldEnemy.enemyType = enemy.enemyType;
-                    oldEnemy.rarity = enemy.rarity;
+                    SpawnableEnemyWithRarity oldEnemy = new SpawnableEnemyWithRarity(enemy.enemyType, enemy.rarity);
                     returnList.Add(oldEnemy);
                     // CentralConfig.instance.mls.LogInfo($"Enemy: {enemy.enemyType.enemyName} was added to the returnlist with no multiplier");
                 }
@@ -759,9 +744,7 @@ namespace CentralConfig
 
                         if (cauterizedItemName == ItemName)
                         {
-                            SpawnableItemWithRarity newItem = new SpawnableItemWithRarity();
-                            newItem.spawnableItem = item;
-                            newItem.rarity = Rarity;
+                            SpawnableItemWithRarity newItem = new SpawnableItemWithRarity(item, Rarity);
                             returnList.Add(newItem);
                             // CentralConfig.instance.mls.LogMessage($"Added scrap {item.itemName} with rarity {Rarity} from string {ItemName}");
                             break;
@@ -823,15 +806,12 @@ namespace CentralConfig
 
                 if (LastAppearance == 0) // appearred last game
                 {
-                    SpawnableItemWithRarity newItem = new SpawnableItemWithRarity();
-                    newItem.spawnableItem = item.spawnableItem;
-                    newItem.rarity = item.rarity;
+                    SpawnableItemWithRarity newItem = new SpawnableItemWithRarity(item.spawnableItem, item.rarity);
                     returnList.Add(newItem);
                 }
                 else // didn't
                 {
-                    SpawnableItemWithRarity newItem = new SpawnableItemWithRarity();
-                    newItem.spawnableItem = item.spawnableItem;
+                    SpawnableItemWithRarity newItem = new SpawnableItemWithRarity(item.spawnableItem, item.rarity);
                     if (MiscConfig.CreateMiscConfig.ScrapShufflerPercent && !(item.rarity < 0 && MiscConfig.CreateMiscConfig.RolloverNegatives))
                     {
                         newItem.rarity = (int)Math.Round((LastAppearance * (item.rarity * (multiplier / 100f))) + item.rarity);

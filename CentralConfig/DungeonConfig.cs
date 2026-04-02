@@ -620,16 +620,6 @@ namespace CentralConfig
             {
                 __instance.dungeonGenerator.Generator.GenerateAsynchronously = false;
             }
-            else if (LoadstoneCompatibility.enabled)
-            {
-                if (LoadstoneCompatibility.IsLoadStoneAsyncing())
-                    __instance.dungeonGenerator.Generator.GenerateAsynchronously = true;
-            }
-            else if (LoadstoneNCompatibility.enabled)
-            {
-                if (LoadstoneNCompatibility.IsLoadStoneNAsyncing())
-                    __instance.dungeonGenerator.Generator.GenerateAsynchronously = true;
-            }
 
             try
             {

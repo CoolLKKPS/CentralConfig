@@ -36,8 +36,6 @@ namespace CentralConfig
     [BepInDependency("Bob123.LCM_KeepScrap", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("Kirpichyov.SaveShipItemsOnDeath", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("LCNoPropsLost", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.adibtw.loadstone", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.adibtw.loadstone.Nightly", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("giosuel.Imperium", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("x753.Peepers", BepInDependency.DependencyFlags.SoftDependency)]
     public class CentralConfig : BaseUnityPlugin

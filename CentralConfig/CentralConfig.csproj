@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -18,20 +18,25 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="73.0.0-ngd.0" />
     <PackageReference Include="UnityEngine.Modules" IncludeAssets="compile" Version="2022.3.62" />
-    <PackageReference Include="Sigurd.BepInEx.CSync" Version="5.0.1" />
-    <PackageReference Include="Evaisa.LethalLib" Version="1.1.1" />
-    <PackageReference Include="mrov.WeatherRegistry" Version="0.8.5" PrivateAssets="true" />
+    <PackageReference Include="Evaisa.LethalLib" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="com.adibtw.loadstone, Version=0.1.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\AdiBTW-Loadstone\com.adibtw.loadstone.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="CSync">
+      <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\Sigurd-CSync\CSync\com.sigurd.csync.dll</HintPath>
     </Reference>
     <Reference Include="Diversity Remastered">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\IntegrityChaos-Diversity\Diversity Remastered.dll</HintPath>
+    </Reference>
+    <Reference Include="DunGen">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\DunGen.dll</HintPath>
     </Reference>
     <Reference Include="FootballEntity">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\Kittenji-Football\FootballEntity.dll</HintPath>
@@ -48,6 +53,9 @@
     <Reference Include="LethalUtilities" Publicize="true">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\kyxino-LethalUtilities\LethalUtilities.dll</HintPath>
     </Reference>
+    <Reference Include="mrov.WeatherRegistry">
+      <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\mrov-WeatherRegistry\WeatherRegistry.dll</HintPath>
+    </Reference>
     <Reference Include="Peepers">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\x753-Peepers\Peepers.dll</HintPath>
     </Reference>
@@ -56,6 +64,15 @@
     </Reference>
     <Reference Include="RollingGiant">
       <HintPath>D:\Runtime dependencies (local)\BepInEx\plugins\NomnomAB-RollingGiant\RollingGiant\RollingGiant.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Netcode.Runtime">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
