@@ -336,7 +336,7 @@ namespace CentralConfig
                                 };
                                 SpawnableMapObject[] newArray = new SpawnableMapObject[level.SelectableLevel.spawnableMapObjects.Length + 1];
                                 Array.Copy(level.SelectableLevel.spawnableMapObjects, newArray, level.SelectableLevel.spawnableMapObjects.Length);
-                                newArray[newArray.Length - 1] = newObject;
+                                newArray[^1] = newObject;
                                 level.SelectableLevel.spawnableMapObjects = newArray;
 
                                 // CentralConfig.instance.mls.LogInfo("Successfully accessed stored TurretContainer reference to use for " + PlanetName);
@@ -399,7 +399,7 @@ namespace CentralConfig
                                 };
                                 SpawnableMapObject[] newArray = new SpawnableMapObject[level.SelectableLevel.spawnableMapObjects.Length + 1];
                                 Array.Copy(level.SelectableLevel.spawnableMapObjects, newArray, level.SelectableLevel.spawnableMapObjects.Length);
-                                newArray[newArray.Length - 1] = newObject;
+                                newArray[^1] = newObject;
                                 level.SelectableLevel.spawnableMapObjects = newArray;
 
                                 // CentralConfig.instance.mls.LogInfo("Successfully accessed stored Landmine reference to use for " + PlanetName);
@@ -462,7 +462,7 @@ namespace CentralConfig
                                 };
                                 SpawnableMapObject[] newArray = new SpawnableMapObject[level.SelectableLevel.spawnableMapObjects.Length + 1];
                                 Array.Copy(level.SelectableLevel.spawnableMapObjects, newArray, level.SelectableLevel.spawnableMapObjects.Length);
-                                newArray[newArray.Length - 1] = newObject;
+                                newArray[^1] = newObject;
                                 level.SelectableLevel.spawnableMapObjects = newArray;
 
                                 // CentralConfig.instance.mls.LogInfo("Successfully accessed stored SpikeRoofTrapHazard reference to use for " + PlanetName);
@@ -1054,7 +1054,7 @@ namespace CentralConfig
             }
 
             float num = __instance.globalTime;
-            __instance.globalTime = Mathf.Clamp(__instance.globalTime + Time.deltaTime * __instance.globalTimeSpeedMultiplier, 0f, __instance.globalTimeAtEndOfDay);
+            __instance.globalTime = Mathf.Clamp(__instance.globalTime + (Time.deltaTime * __instance.globalTimeSpeedMultiplier), 0f, __instance.globalTimeAtEndOfDay);
             num = __instance.globalTime - num;
             __instance.timeUntilDeadline -= num;
             CentralConfig.shid += num;
@@ -1151,7 +1151,7 @@ namespace CentralConfig
         static void Postfix(RoundManager __instance)
         {
             float fakenum = __instance.currentLevel.enemySpawnChanceThroughoutDay.Evaluate(__instance.timeScript.currentDayTime / __instance.timeScript.totalTime);
-            float fakenum2 = fakenum + (float)Mathf.Abs(TimeOfDay.Instance.daysUntilDeadline - 3) / 1.6f;
+            float fakenum2 = fakenum + ((float)Mathf.Abs(TimeOfDay.Instance.daysUntilDeadline - 3) / 1.6f);
             int fakevalue = Mathf.Clamp(__instance.AnomalyRandom.Next((int)(fakenum2 - __instance.currentLevel.spawnProbabilityRange), (int)(fakenum + __instance.currentLevel.spawnProbabilityRange)), __instance.minEnemiesToSpawn, 20);
             fakevalue = Mathf.Clamp(fakevalue, 0, __instance.allEnemyVents.Length);
 

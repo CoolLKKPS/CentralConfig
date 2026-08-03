@@ -552,7 +552,7 @@ namespace CentralConfig
             if (CentralConfig.SyncConfig.ScaleDungeonSizeByPlayers)
             {
                 float PlayerDiff = StartOfRound.Instance.connectedPlayersAmount + 1 - (float)MiscConfig.CreateMiscConfig.SDSBPThreshold;
-                float DSBP = Mathf.Clamp(Mathf.Pow(1f + (MiscConfig.CreateMiscConfig.SDSBPPercentIncrease + MiscConfig.CreateMiscConfig.SDSBPIncreaseChange * Mathf.Abs(PlayerDiff)) / 100f, PlayerDiff), MiscConfig.CreateMiscConfig.SDSBPMinIncrease, MiscConfig.CreateMiscConfig.SDSBPMaxIncrease);
+                float DSBP = Mathf.Clamp(Mathf.Pow(1f + ((MiscConfig.CreateMiscConfig.SDSBPPercentIncrease + (MiscConfig.CreateMiscConfig.SDSBPIncreaseChange * Mathf.Abs(PlayerDiff))) / 100f), PlayerDiff), MiscConfig.CreateMiscConfig.SDSBPMinIncrease, MiscConfig.CreateMiscConfig.SDSBPMaxIncrease);
                 CentralConfig.instance.mls.LogInfo($"Dungeon Size Scaler by PlayerCount: {DSBP}x");
                 NewMultiplier *= DSBP;
             }
@@ -811,7 +811,7 @@ namespace CentralConfig
             }
             RetryCounter++;
 
-            if (__instance.LengthMultiplier <= 0 && TryBig == true)
+            if (__instance.LengthMultiplier <= 0 && TryBig)
             {
                 if (NetworkManager.Singleton.IsHost)
                 {
@@ -822,7 +822,7 @@ namespace CentralConfig
                 __instance.Cancel();
                 throw new Exception("Dungeon Generation failed.");
             }
-            if (__instance.LengthMultiplier <= 0 && TryBig == false)
+            if (__instance.LengthMultiplier <= 0 && !TryBig)
             {
                 if (LevelManager.CurrentExtendedLevel.SelectableLevel.factorySizeMultiplier >= 0)
                 {

@@ -336,11 +336,11 @@ namespace CentralConfig
                 float uninsuredProportion = uninsuredBodies / totalPlayers;
                 float insuredProportion = AdjustedbodiesInsured / totalPlayers;
 
-                totalFinePercentage = (int)Mathf.Round(Grungus * 100f * (uninsuredProportion + insuredProportion / Shmunguss));
+                totalFinePercentage = (int)Mathf.Round(Grungus * 100f * (uninsuredProportion + (insuredProportion / Shmunguss)));
             }
             else
             {
-                totalFinePercentage = (int)Mathf.Round((Grungus * (playersDead - AdjustedbodiesInsured) + Grungus / Shmunguss * AdjustedbodiesInsured) * 100f);
+                totalFinePercentage = (int)Mathf.Round(((Grungus * (playersDead - AdjustedbodiesInsured)) + ((Grungus / Shmunguss) * AdjustedbodiesInsured)) * 100f);
             }
             if (playersDead > 1)
             {
@@ -459,22 +459,22 @@ namespace CentralConfig
                 switch (__instance.statsUIElements.gradeLetter.text)
                 {
                     case "F":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[0] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[0] / 100f)));
                         break;
                     case "D":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[1] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[1] / 100f)));
                         break;
                     case "C":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[2] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[2] / 100f)));
                         break;
                     case "B":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[3] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[3] / 100f)));
                         break;
                     case "A":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[4] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[4] / 100f)));
                         break;
                     case "S":
-                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + boostList[5] / 100f));
+                        terminal.groupCredits = (int)(terminal.groupCredits * (1f + (boostList[5] / 100f)));
                         break;
                     default:
                         CentralConfig.instance.mls.LogInfo("Letter Grade wasn't Between S and F.");

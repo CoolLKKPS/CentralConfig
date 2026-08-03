@@ -353,7 +353,7 @@ namespace CentralConfig
                         {
                             enemy.rarity = LastAppearance;
                         }
-                        newEnemy.rarity = enemy.rarity + LastAppearance * multiplier;
+                        newEnemy.rarity = enemy.rarity + (LastAppearance * multiplier);
                         newEnemy.rarity = Mathf.Clamp(newEnemy.rarity, -99999, 99999);
                     }
                     returnList.Add(newEnemy);
@@ -823,7 +823,7 @@ namespace CentralConfig
                         {
                             item.rarity = LastAppearance;
                         }
-                        newItem.rarity = item.rarity + LastAppearance * multiplier;
+                        newItem.rarity = item.rarity + (LastAppearance * multiplier);
                         newItem.rarity = Mathf.Clamp(newItem.rarity, -99999, 99999);
 
                     }
@@ -1063,8 +1063,7 @@ namespace CentralConfig
                 }
                 else
                 {
-                    StringWithRarity newflow = new StringWithRarity(null, 0);
-                    newflow.Name = String.Name;
+                    StringWithRarity newflow = new StringWithRarity(String.Name, 0);
                     if (MiscConfig.CreateMiscConfig.DungeonShufflerPercent && !(String.Rarity < 0 && MiscConfig.CreateMiscConfig.RolloverNegatives))
                     {
                         newflow.Rarity = (int)Math.Round((LastAppearance * (String.Rarity * (multiplier / 100f))) + String.Rarity);
@@ -1076,7 +1075,7 @@ namespace CentralConfig
                         {
                             String.Rarity = LastAppearance;
                         }
-                        newflow.Rarity = String.Rarity + LastAppearance * multiplier;
+                        newflow.Rarity = String.Rarity + (LastAppearance * multiplier);
                         newflow.Rarity = Mathf.Clamp(newflow.Rarity, -99999, 99999);
                     }
                     returnList.Add(newflow);
@@ -1132,9 +1131,7 @@ namespace CentralConfig
                 }
                 else
                 {
-                    Vector2WithRarity newflow = new Vector2WithRarity(0, 0, 0);
-                    newflow.Min = Vector.Min;
-                    newflow.Max = Vector.Max;
+                    Vector2WithRarity newflow = new Vector2WithRarity(Vector.Min, Vector.Max, 0);
                     if (MiscConfig.CreateMiscConfig.DungeonShufflerPercent && !(Vector.Rarity < 0 && MiscConfig.CreateMiscConfig.RolloverNegatives))
                     {
                         newflow.Rarity = (int)Math.Round((LastAppearance * (Vector.Rarity * (multiplier / 100f))) + Vector.Rarity);
@@ -1146,7 +1143,7 @@ namespace CentralConfig
                         {
                             Vector.Rarity = LastAppearance;
                         }
-                        newflow.Rarity = Vector.Rarity + LastAppearance * multiplier;
+                        newflow.Rarity = Vector.Rarity + (LastAppearance * multiplier);
                         newflow.Rarity = Mathf.Clamp(newflow.Rarity, -99999, 99999);
                     }
                     returnList.Add(newflow);

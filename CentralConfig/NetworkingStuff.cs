@@ -125,7 +125,7 @@ namespace CentralConfig
             if (CentralConfig.SyncConfig.ScaleScrapValueByPlayers)
             {
                 float PlayerDiff = StartOfRound.Instance.connectedPlayersAmount + 1 - (float)MiscConfig.CreateMiscConfig.SSVBPThreshold;
-                scrapvaluemultiplier *= Mathf.Clamp(Mathf.Pow(1f + (MiscConfig.CreateMiscConfig.SSVBPPercentIncrease + MiscConfig.CreateMiscConfig.SSVBPIncreaseChange * Mathf.Abs(PlayerDiff)) / 100f, -PlayerDiff), MiscConfig.CreateMiscConfig.SSVBPMinIncrease, MiscConfig.CreateMiscConfig.SSVBPMaxIncrease);
+                scrapvaluemultiplier *= Mathf.Clamp(Mathf.Pow(1f + ((MiscConfig.CreateMiscConfig.SSVBPPercentIncrease + (MiscConfig.CreateMiscConfig.SSVBPIncreaseChange * Mathf.Abs(PlayerDiff))) / 100f), -PlayerDiff), MiscConfig.CreateMiscConfig.SSVBPMinIncrease, MiscConfig.CreateMiscConfig.SSVBPMaxIncrease);
             }
             if (scrapvaluemultiplier < 0)
             {
