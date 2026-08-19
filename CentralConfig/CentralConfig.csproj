@@ -9,6 +9,8 @@
     <RootNamespace>$(Product)</RootNamespace>
     <TargetName>$(Product)</TargetName>
     <Version>1.0.0</Version>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>

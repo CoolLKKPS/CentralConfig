@@ -275,7 +275,7 @@ namespace CentralConfig
                 CentralConfig.HarmonyTouch2 = true;
             }
         }
-        static void Prefix()
+        private static void Prefix()
         {
             CentralConfig.ConfigFile2 = new CreateDungeonConfig(CentralConfig.instance.Config); // Dungeon config is created when you join a lobby (So every other config is already applied)
         }
@@ -367,9 +367,9 @@ namespace CentralConfig
 
                 if (CentralConfig.SyncConfig.DoEnemyInjectionsByDungeon && NetworkManager.Singleton.IsHost)
                 {
-                    if (WaitForDungeonsToRegister.CreateDungeonConfig.InteriorEnemyByDungeon.ContainsKey(dungeon))
+                    if (WaitForDungeonsToRegister.CreateDungeonConfig.InteriorEnemyByDungeon.TryGetValue(dungeon, out var interiorEnemyEntry))
                     {
-                        string IntEneStr = WaitForDungeonsToRegister.CreateDungeonConfig.InteriorEnemyByDungeon[dungeon];
+                        string IntEneStr = interiorEnemyEntry;
                         Vector2 clampIntRarity = new Vector2(-99999, 99999);
                         List<SpawnableEnemyWithRarity> interiorenemyList = ConfigAider.ConvertStringToEnemyList(IntEneStr, clampIntRarity);
                         WaitForDungeonsToRegister.CreateDungeonConfig.InteriorEnemiesD[dungeon] = interiorenemyList;
@@ -388,9 +388,9 @@ namespace CentralConfig
 
                 if (CentralConfig.SyncConfig.DoScrapInjectionsByDungeon && NetworkManager.Singleton.IsHost)
                 {
-                    if (WaitForDungeonsToRegister.CreateDungeonConfig.ScrapByDungeon.ContainsKey(dungeon))
+                    if (WaitForDungeonsToRegister.CreateDungeonConfig.ScrapByDungeon.TryGetValue(dungeon, out var scrapByDungeonEntry))
                     {
-                        string ScrStr = WaitForDungeonsToRegister.CreateDungeonConfig.ScrapByDungeon[dungeon];
+                        string ScrStr = scrapByDungeonEntry;
                         Vector2 clampScrRarity = new Vector2(-99999, 99999);
                         List<SpawnableItemWithRarity> scraplist = ConfigAider.ConvertStringToItemList(ScrStr, clampScrRarity);
                         WaitForDungeonsToRegister.CreateDungeonConfig.ScrapD[dungeon] = scraplist;
@@ -440,7 +440,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(HangarShipDoor), "Start")]
     public class FrApplyDungeon
     {
-        static void Postfix()
+        private static void Postfix()
         {
             ApplyDungeonConfig applyConfig = new ApplyDungeonConfig();
             applyConfig.UpdateDungeonValues();
@@ -449,8 +449,8 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "GenerateNewFloor")]
     public static class NewDungeonGenerator
     {
-        static float PreClampValue;
-        static bool Prefix(RoundManager __instance)
+        private static float PreClampValue;
+        private static bool Prefix(RoundManager __instance)
         {
             if (LevelManager.CurrentExtendedLevel.SelectableLevel.dungeonFlowTypes != null && LevelManager.CurrentExtendedLevel.SelectableLevel.dungeonFlowTypes.Length != 0)
             {
@@ -500,9 +500,9 @@ namespace CentralConfig
             float NewMultiplier = LevelManager.CurrentExtendedLevel.SelectableLevel.factorySizeMultiplier;
             if (CentralConfig.SyncConfig.DoDunSizeOverrides)
             {
-                if (WaitForDungeonsToRegister.CreateDungeonConfig.MapTileSize.ContainsKey(DungeonManager.CurrentExtendedDungeonFlow))
+                if (WaitForDungeonsToRegister.CreateDungeonConfig.MapTileSize.TryGetValue(DungeonManager.CurrentExtendedDungeonFlow, out var mapTileSizeEntry))
                 {
-                    NewMultiplier /= WaitForDungeonsToRegister.CreateDungeonConfig.MapTileSize[DungeonManager.CurrentExtendedDungeonFlow];
+                    NewMultiplier /= mapTileSizeEntry;
                     NewMultiplier *= __instance.mapSizeMultiplier;
                     NewMultiplier = (float)((double)Mathf.Round(NewMultiplier * 100f) / 100.0);
 
@@ -708,7 +708,7 @@ namespace CentralConfig
         public static bool Catch3 = false;
         public static bool Catch2 = false;
         public static bool Catch1 = false;
-        static bool Prefix(DungeonGenerator __instance, ref bool isRetry)
+        private static bool Prefix(DungeonGenerator __instance, ref bool isRetry)
         {
             if (!CentralConfig.SyncConfig.UseNewGen || Defaulted)
             {
@@ -846,12 +846,12 @@ namespace CentralConfig
     [HarmonyPatch(typeof(DungeonGenerator), "InnerGenerate")]
     public static class LogFinalSize
     {
-        static void Postfix(DungeonGenerator __instance)
+        private static void Postfix(DungeonGenerator __instance)
         {
             int randomValue = __instance.DungeonFlow.Length.GetRandom(__instance.RandomStream);
             CentralConfig.instance.mls.LogInfo("Selected random value from IntRange: " + randomValue);
 
-            float multipliedValue = (float)randomValue * __instance.LengthMultiplier;
+            float multipliedValue = randomValue * __instance.LengthMultiplier;
             CentralConfig.instance.mls.LogInfo("Multiplied value: " + multipliedValue);
 
             int roundedValue = Mathf.RoundToInt(multipliedValue);
@@ -872,7 +872,7 @@ namespace CentralConfig
         public static int CallNumber;
         public static void CountTiles()
         {
-            tiles = new Tile[0];
+            tiles = Array.Empty<Tile>();
             tiles = UnityEngine.Object.FindObjectsByType<Tile>(FindObjectsSortMode.None);
             TileCounts.Add(tiles.Length);
             BigLog += "\nThere are: " + tiles.Length + " tiles.";
@@ -922,7 +922,7 @@ namespace CentralConfig
         public static Dictionary<ExtendedLevel, int> ScrapListLength = new Dictionary<ExtendedLevel, int>();
         public static int totalScrapTotal;
         public static int Moons;*/
-        static void Postfix()
+        private static void Postfix()
         {
             if (!NetworkManager.Singleton.IsHost)
             {
@@ -1030,7 +1030,7 @@ namespace CentralConfig
                 ConfigAider.Instance.StartCoroutine(LogEnemyTables());
             }
         }
-        static IEnumerator LogEnemyTables()
+        private static IEnumerator LogEnemyTables()
         {
             yield return new WaitForSeconds(10);
 
@@ -1144,7 +1144,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(LungProp), "Start")]
     public static class IncreaseLungValue
     {
-        static void Prefix(LungProp __instance)
+        private static void Prefix(LungProp __instance)
         {
             ShareScrapValue.Instance.DetermineMultiplier((CurrentMultiplier) =>
             {
@@ -1165,10 +1165,9 @@ namespace CentralConfig
     {
         public static int Counter = 0;
         public static Dictionary<RedLocustBees, int> BeeCount = new Dictionary<RedLocustBees, int>();
-        static void Postfix(RedLocustBees __instance)
+        private static void Postfix(RedLocustBees __instance)
         {
-            if (!BeeCount.ContainsKey(__instance))
-                BeeCount.Add(__instance, Counter);
+            BeeCount.TryAdd(__instance, Counter);
             __instance.StartCoroutine(WaitForHive(__instance));
             Counter++;
         }

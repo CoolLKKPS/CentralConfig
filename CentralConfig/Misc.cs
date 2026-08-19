@@ -5,6 +5,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using LethalLevelLoader;
 using LethalLevelLoader.Tools;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -279,12 +280,12 @@ namespace CentralConfig
     [HarmonyPatch(typeof(HUDManager), "ApplyPenalty")]
     public class ChangeFineAmount
     {
-        static float Grungus;
-        static float Shmunguss;
-        static float totalPlayers = GameNetworkManager.Instance.connectedPlayers + 1;
-        static string Recovered;
-        static string Bodies;
-        static bool Prefix(HUDManager __instance, int playersDead, int bodiesInsured)
+        private static float Grungus;
+        private static float Shmunguss;
+        private static readonly float totalPlayers = GameNetworkManager.Instance.connectedPlayers + 1;
+        private static string Recovered;
+        private static string Bodies;
+        private static bool Prefix(HUDManager __instance, int playersDead, int bodiesInsured)
         {
             if (!CentralConfig.SyncConfig.DoFineOverrides)
             {
@@ -300,7 +301,7 @@ namespace CentralConfig
                 Grungus = MiscConfig.CreateMiscConfig.FineAmount / 100f;
                 Shmunguss = 1 / (MiscConfig.CreateMiscConfig.InsuranceReduction / 100f);
             }
-            Terminal terminal = Object.FindFirstObjectByType<Terminal>();
+            Terminal terminal = UnityEngine.Object.FindFirstObjectByType<Terminal>();
             int groupCredits = terminal.groupCredits;
             int AdjustedbodiesInsured = Mathf.Max(bodiesInsured, 0);
             for (int i = 0; i < playersDead - AdjustedbodiesInsured; i++)
@@ -340,7 +341,8 @@ namespace CentralConfig
             }
             else
             {
-                totalFinePercentage = (int)Mathf.Round(((Grungus * (playersDead - AdjustedbodiesInsured)) + ((Grungus / Shmunguss) * AdjustedbodiesInsured)) * 100f);
+                float insuredFineFactor = Grungus / Shmunguss;
+                totalFinePercentage = (int)Mathf.Round(((Grungus * (playersDead - AdjustedbodiesInsured)) + (insuredFineFactor * AdjustedbodiesInsured)) * 100f);
             }
             if (playersDead > 1)
             {
@@ -374,7 +376,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(HUDManager), "FillEndGameStats")]
     public static class RemoveAllPlayersDeadMessage
     {
-        static void Prefix(HUDManager __instance)
+        private static void Prefix(HUDManager __instance)
         {
             bool isScrapKeeperActive = CheckForScrapKeepers();
 
@@ -382,7 +384,7 @@ namespace CentralConfig
             overlayColor.a = isScrapKeeperActive ? 1f : 0f;
             __instance.statsUIElements.allPlayersDeadOverlay.color = overlayColor;
         }
-        static bool CheckForScrapKeepers()
+        private static bool CheckForScrapKeepers()
         {
             if (LUCompatibility.enabled)
                 if (LUCompatibility.ReturnLUScrapKeeper())
@@ -399,12 +401,12 @@ namespace CentralConfig
                 return false;
             return true;
         }
-        static void Postfix(HUDManager __instance)
+        private static void Postfix(HUDManager __instance)
         {
             if (!CentralConfig.SyncConfig.DoFineOverrides)
                 return;
 
-            Terminal terminal = Object.FindFirstObjectByType<Terminal>();
+            Terminal terminal = UnityEngine.Object.FindFirstObjectByType<Terminal>();
 
             string[] boostArray = MiscConfig.CreateMiscConfig.BoostString.Value.Split(',');
             if (boostArray.Length != 6)
@@ -493,16 +495,16 @@ namespace CentralConfig
     {
         public static Dictionary<char, ScanNodeProperties> fireExitScanProperties = new Dictionary<char, ScanNodeProperties>();
         public static bool IsDone = false;
-        static void Postfix()
+        private static void Postfix()
         {
             if (IsDone || !CentralConfig.SyncConfig.DoScanNodeOverrides)
             {
                 return;
             }
 
-            List<EntranceTeleport> entranceTeleports = Object.FindObjectsByType<EntranceTeleport>(FindObjectsSortMode.None).ToList();
+            List<EntranceTeleport> entranceTeleports = UnityEngine.Object.FindObjectsByType<EntranceTeleport>(FindObjectsSortMode.None).ToList();
             int numFireExits = (entranceTeleports.Count / 2) - 1;
-            // CentralConfig.instance.mls.LogInfo("Doing it lol");
+            // CentralConfig.instance.mls.LogInfo("Doing it lol");          // Wait what?
 
             char[] letters = { 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
             if (numFireExits <= letters.Length)
@@ -544,7 +546,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "GenerateNewFloor")]
     public static class IncreaseNodeDistanceOnShipAndMain
     {
-        static void Postfix()
+        private static void Postfix()
         {
             if (!CentralConfig.SyncConfig.DoScanNodeOverrides)
             {
@@ -558,10 +560,10 @@ namespace CentralConfig
             System.Random rand = new System.Random(StartOfRound.Instance.randomMapSeed + 42);
             string randomSubText = subTexts[rand.Next(subTexts.Count)];
 
-            ScanNodeProperties[] allScanNodes = Object.FindObjectsByType<ScanNodeProperties>(FindObjectsSortMode.None);
+            ScanNodeProperties[] allScanNodes = UnityEngine.Object.FindObjectsByType<ScanNodeProperties>(FindObjectsSortMode.None);
             foreach (ScanNodeProperties scanNode in allScanNodes)
             {
-                if (scanNode.headerText.ToLower() == "main entrance" || scanNode.headerText.ToLower() == "mainentrance")
+                if (scanNode.headerText.Equals("main entrance", StringComparison.OrdinalIgnoreCase) || scanNode.headerText.Equals("mainentrance", StringComparison.OrdinalIgnoreCase))
                 {
                     scanNode.minRange = MiscConfig.CreateMiscConfig.MEMinScan;
                     scanNode.maxRange = MiscConfig.CreateMiscConfig.MEMaxScan;
@@ -571,7 +573,7 @@ namespace CentralConfig
                         scanNode.subText = randomSubText;
                     }
                 }
-                else if (scanNode.headerText.ToLower() == "ship")
+                else if (scanNode.headerText.Equals("ship", StringComparison.OrdinalIgnoreCase))
                 {
                     scanNode.minRange = MiscConfig.CreateMiscConfig.ShipMinScan;
                     scanNode.maxRange = MiscConfig.CreateMiscConfig.ShipMaxScan;
@@ -588,7 +590,7 @@ namespace CentralConfig
     public static class ExtendScan
     {
         public static float UltimateMax;
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             if (CentralConfig.SyncConfig.DoScanNodeOverrides)
             {
@@ -618,7 +620,7 @@ namespace CentralConfig
         public static int EntranceScanMax;
         public static int ShipScanMax;
         public static int FEScanMax;
-        static void Postfix(EntranceTeleport __instance, int playerObj)
+        private static void Postfix(EntranceTeleport __instance, int playerObj)
         {
             if (!__instance.IsHost || !CentralConfig.SyncConfig.DoScanNodeOverrides)
             {
@@ -627,16 +629,16 @@ namespace CentralConfig
 
             __instance.StartCoroutine(PerformActionsWithDelay(__instance, playerObj));
         }
-        static IEnumerator PerformActionsWithDelay(EntranceTeleport __instance, int playerObj)
+        private static IEnumerator PerformActionsWithDelay(EntranceTeleport __instance, int playerObj)
         {
             yield return new WaitForSeconds(3);
 
-            StartOfRound startOfRound = Object.FindFirstObjectByType<StartOfRound>();
+            StartOfRound startOfRound = UnityEngine.Object.FindFirstObjectByType<StartOfRound>();
             PlayerControllerB player = startOfRound.allPlayerScripts[playerObj];
 
             PlayerScanNodeProperties scanNodeProperties = PlayerScanNodeProperties.playerScanNodeProperties[player];
 
-            ScanNodeProperties[] allScanNodes = Object.FindObjectsByType<ScanNodeProperties>(FindObjectsSortMode.None);
+            ScanNodeProperties[] allScanNodes = UnityEngine.Object.FindObjectsByType<ScanNodeProperties>(FindObjectsSortMode.None);
 
             if (player.isInsideFactory)
             {
@@ -649,17 +651,17 @@ namespace CentralConfig
 
             foreach (ScanNodeProperties scanNode in allScanNodes)
             {
-                if (scanNode.headerText.ToLower() == "main entrance" || scanNode.headerText.ToLower() == "mainentrance" || scanNode.headerText.ToLower().Contains("entrance"))
+                if (scanNode.headerText.Equals("main entrance", StringComparison.OrdinalIgnoreCase) || scanNode.headerText.Equals("mainentrance", StringComparison.OrdinalIgnoreCase) || scanNode.headerText.Contains("entrance", StringComparison.OrdinalIgnoreCase))
                 {
                     scanNode.maxRange = player.isInsideFactory ? scanNodeProperties.MEMinScan : scanNodeProperties.MEMaxScan;
                     EntranceScanMax = scanNode.maxRange;
                 }
-                else if (scanNode.headerText.ToLower() == "ship" || scanNode.headerText.ToLower().Contains("ship"))
+                else if (scanNode.headerText.Equals("ship", StringComparison.OrdinalIgnoreCase) || scanNode.headerText.Contains("ship", StringComparison.OrdinalIgnoreCase))
                 {
                     scanNode.maxRange = player.isInsideFactory ? scanNodeProperties.ShipMinScan : scanNodeProperties.ShipMaxScan;
                     ShipScanMax = scanNode.maxRange;
                 }
-                else if (scanNode.headerText.ToLower() == "fire exit" || scanNode.headerText.ToLower().Contains("fire exit"))
+                else if (scanNode.headerText.Equals("fire exit", StringComparison.OrdinalIgnoreCase) || scanNode.headerText.Contains("fire exit", StringComparison.OrdinalIgnoreCase))
                 {
                     scanNode.maxRange = player.isInsideFactory ? scanNodeProperties.FEMinScan : scanNodeProperties.FEMaxScan;
                     FEScanMax = scanNode.maxRange;
@@ -682,7 +684,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(PlayerControllerB), "Start")]
     public static class AddPlayerToDict
     {
-        static void Postfix(PlayerControllerB __instance)
+        private static void Postfix(PlayerControllerB __instance)
         {
             if (!CentralConfig.SyncConfig.DoScanNodeOverrides)
             {

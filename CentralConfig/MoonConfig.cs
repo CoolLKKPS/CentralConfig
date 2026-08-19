@@ -601,7 +601,7 @@ namespace CentralConfig
                 CentralConfig.HarmonyTouch6 = true;
             }
         }
-        static void Prefix()
+        private static void Prefix()
         {
             if (NetworkManager.Singleton.IsHost)
             {
@@ -971,7 +971,7 @@ namespace CentralConfig
             }
             Ready = true;
         }
-        static IEnumerator LogSeed()
+        private static IEnumerator LogSeed()
         {
             yield return new WaitForSeconds(10);
 
@@ -981,7 +981,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(HangarShipDoor), "Start")]
     public class FrApplyMoon
     {
-        static void Postfix()
+        private static void Postfix()
         {
             ApplyMoonConfig applyConfig = new ApplyMoonConfig();
             applyConfig.UpdateMoonValues();
@@ -990,7 +990,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "SpawnDaytimeEnemiesOutside")]
     public class CountTraps
     {
-        static void Postfix(RoundManager __instance)
+        private static void Postfix(RoundManager __instance)
         {
             var landmines = UnityEngine.Object.FindObjectsByType<Landmine>(FindObjectsSortMode.None);
 
@@ -1011,7 +1011,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "SpawnScrapInLevel")]
     public class FreeEnemies
     {
-        static void Prefix(RoundManager __instance)
+        private static void Prefix(RoundManager __instance)
         {
             if (!NetworkManager.Singleton.IsHost)
             {
@@ -1027,7 +1027,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(TimeOfDay), "MoveGlobalTime")]
     public static class TimeFix
     {
-        static bool Prefix(TimeOfDay __instance)
+        private static bool Prefix(TimeOfDay __instance)
         {
             if (!CentralConfig.SyncConfig.TimeSettings)
             {
@@ -1066,7 +1066,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(GameNetworkManager), "Disconnect")]
     public static class FixTimeUntilDeadlineonDC
     {
-        static void Postfix()
+        private static void Postfix()
         {
             TimeOfDay timeOfDay = UnityEngine.Object.FindFirstObjectByType<TimeOfDay>();
             if (timeOfDay != null)
@@ -1079,7 +1079,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(TimeOfDay), "MoveGlobalTime")]
     public static class UpdateTimeFaster
     {
-        static void Postfix()
+        private static void Postfix()
         {
             if (!CentralConfig.SyncConfig.UpdateTimeFaster)
             {
@@ -1093,7 +1093,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(System.Random), "Next", new[] { typeof(int), typeof(int) })]
     public static class RandomNextPatch
     {
-        static void Prefix(ref int minValue, ref int maxValue)
+        private static void Prefix(ref int minValue, ref int maxValue)
         {
             if (minValue > maxValue)
             {
@@ -1104,7 +1104,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(StartOfRound), "PassTimeToNextDay")]
     public static class DayTimePassFix
     {
-        static bool Prefix(StartOfRound __instance, int connectedPlayersOnServer = 0)
+        private static bool Prefix(StartOfRound __instance, int connectedPlayersOnServer = 0)
         {
             if (!CentralConfig.SyncConfig.TimeSettings)
             {
@@ -1148,10 +1148,10 @@ namespace CentralConfig
     public static class ShowIntEnemyCount
     {
         public static int IntEnemiesSpawned = 0;
-        static void Postfix(RoundManager __instance)
+        private static void Postfix(RoundManager __instance)
         {
             float fakenum = __instance.currentLevel.enemySpawnChanceThroughoutDay.Evaluate(__instance.timeScript.currentDayTime / __instance.timeScript.totalTime);
-            float fakenum2 = fakenum + ((float)Mathf.Abs(TimeOfDay.Instance.daysUntilDeadline - 3) / 1.6f);
+            float fakenum2 = fakenum + (Mathf.Abs(TimeOfDay.Instance.daysUntilDeadline - 3) / 1.6f);
             int fakevalue = Mathf.Clamp(__instance.AnomalyRandom.Next((int)(fakenum2 - __instance.currentLevel.spawnProbabilityRange), (int)(fakenum + __instance.currentLevel.spawnProbabilityRange)), __instance.minEnemiesToSpawn, 20);
             fakevalue = Mathf.Clamp(fakevalue, 0, __instance.allEnemyVents.Length);
 
@@ -1162,7 +1162,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "PlotOutEnemiesForNextHour")]
     public static class MoarEnemies1
     {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             foreach (var inst in instructions)
             {
@@ -1180,7 +1180,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "SpawnDaytimeEnemiesOutside")]
     public static class MoarEnemies2
     {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             foreach (var inst in instructions)
             {
@@ -1198,7 +1198,7 @@ namespace CentralConfig
     [HarmonyPatch(typeof(RoundManager), "SpawnEnemiesOutside")]
     public static class MoarEnemies3
     {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             foreach (var inst in instructions)
             {
@@ -1218,7 +1218,7 @@ namespace CentralConfig
     public class RenameCelest
     {
         public static string planetName = "";
-        static bool Prefix(ref SelectableLevel selectableLevel, ref string __result)
+        private static bool Prefix(ref SelectableLevel selectableLevel, ref string __result)
         {
             if (selectableLevel != null)
             {

@@ -38,14 +38,14 @@ namespace CentralConfig
             public static List<ExtendedDungeonFlow> AllDungeons = new List<ExtendedDungeonFlow>();
             public static List<ExtendedLevel> AllLevels = new List<ExtendedLevel>();
             public static bool WasLastHost = false;
-            static void Prefix()
+            private static void Prefix()
             {
                 if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
                     WasLastHost = true;
                 else
                     WasLastHost = false;
             }
-            static void Postfix()
+            private static void Postfix()
             {
                 if (CentralConfig.instance != null)
                 {
@@ -148,7 +148,7 @@ namespace CentralConfig
         {
             public static List<Item> CapturedScrapToSpawn = new List<Item>();
             public static string LogScrapUpdate = "\n";
-            static void Postfix()
+            private static void Postfix()
             {
                 GrabbableObject CrownObject = UnityEngine.Object.FindObjectsByType<GrabbableObject>(UnityEngine.FindObjectsSortMode.None).FirstOrDefault(obj => obj.itemProperties.itemName == "Crown");
                 if (CrownObject != null)
@@ -198,10 +198,10 @@ namespace CentralConfig
 
                     if (!ScrapAppearances.ContainsKey(item))
                     {
-                        if (ScrapAppearanceString.ContainsKey(item.itemName))
+                        if (ScrapAppearanceString.TryGetValue(item.itemName, out int savedScrapAppearance))
                         {
-                            ScrapAppearances.Add(item, ScrapAppearanceString[item.itemName]);
-                            CentralConfig.instance.mls.LogInfo($"Remembered saved Item Key: {item.itemName}, Days: {ScrapAppearances[item]}");
+                            ScrapAppearances.Add(item, savedScrapAppearance);
+                            CentralConfig.instance.mls.LogInfo($"Remembered saved Item Key: {item.itemName}, Days: {savedScrapAppearance}");
                         }
                         else
                         {
@@ -210,10 +210,7 @@ namespace CentralConfig
                             // CentralConfig.instance.mls.LogInfo($"Added new Item Key: {item.itemName}");
                         }
                     }
-                    if (!ScrapAppearanceString.ContainsKey(item.itemName))
-                    {
-                        ScrapAppearanceString.Add(item.itemName, ScrapAppearances[item]);
-                    }
+                    ScrapAppearanceString.TryAdd(item.itemName, ScrapAppearances[item]);
 
                     if (CapturedScrapToSpawn.Contains(item))
                     {
@@ -236,7 +233,7 @@ namespace CentralConfig
     public static class CatchItemsInShip
     {
         public static List<GrabbableObject> ItemsInShip = new List<GrabbableObject>();
-        static void Postfix()
+        private static void Postfix()
         {
             if (!CentralConfig.SyncConfig.ScrapShuffle || !NetworkManager.Singleton.IsHost || LevelManager.CurrentExtendedLevel.NumberlessPlanetName == "Gordion")
             {
@@ -256,7 +253,7 @@ namespace CentralConfig
         [HarmonyPatch(typeof(RoundManager), "AdvanceHourAndSpawnNewBatchOfEnemies")]
         public static class CheckForEnemySpawns
         {
-            static void Postfix()
+            private static void Postfix()
             {
                 if (!CentralConfig.SyncConfig.EnemyShuffle || !NetworkManager.Singleton.IsHost)
                 {
@@ -266,17 +263,14 @@ namespace CentralConfig
                 List<EnemyAI> SpawnedEnemies = UnityEngine.Object.FindObjectsByType<EnemyAI>(UnityEngine.FindObjectsSortMode.None).ToList();
                 foreach (EnemyAI enemy in SpawnedEnemies)
                 {
-                    if (!DidSpawnYet.ContainsKey(enemy.enemyType))
-                    {
-                        DidSpawnYet.Add(enemy.enemyType, false);
-                    }
+                    DidSpawnYet.TryAdd(enemy.enemyType, false);
 
                     if (!EnemyAppearances.ContainsKey(enemy.enemyType))
                     {
-                        if (EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName))
+                        if (EnemyAppearanceString.TryGetValue(enemy.enemyType.enemyName, out int savedEnemyAppearance))
                         {
-                            EnemyAppearances.Add(enemy.enemyType, EnemyAppearanceString[enemy.enemyType.enemyName]);
-                            CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {EnemyAppearances[enemy.enemyType]}");
+                            EnemyAppearances.Add(enemy.enemyType, savedEnemyAppearance);
+                            CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {savedEnemyAppearance}");
                         }
                         else
                         {
@@ -285,10 +279,7 @@ namespace CentralConfig
                             // CentralConfig.instance.mls.LogInfo($"Added new Enemy Key: {enemy.enemyType.enemyName}");
                         }
                     }
-                    if (!EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName))
-                    {
-                        EnemyAppearanceString.Add(enemy.enemyType.enemyName, EnemyAppearances[enemy.enemyType]);
-                    }
+                    EnemyAppearanceString.TryAdd(enemy.enemyType.enemyName, EnemyAppearances[enemy.enemyType]);
 
                     if (!DidSpawnYet[enemy.enemyType])
                     {
@@ -302,7 +293,7 @@ namespace CentralConfig
         public static class UpdateEnemyDictionary
         {
             public static string LogEnemyUpdate = "\n";
-            static void Postfix()
+            private static void Postfix()
             {
                 IncreaseHiveValue.Counter = 0;
                 if (!CentralConfig.SyncConfig.EnemyShuffle || !NetworkManager.Singleton.IsHost || LevelManager.CurrentExtendedLevel.NumberlessPlanetName == "Gordion")
@@ -313,17 +304,14 @@ namespace CentralConfig
 
                 foreach (SpawnableEnemyWithRarity enemy in LevelManager.CurrentExtendedLevel.SelectableLevel.Enemies.Concat(LevelManager.CurrentExtendedLevel.SelectableLevel.DaytimeEnemies.Concat(LevelManager.CurrentExtendedLevel.SelectableLevel.OutsideEnemies)))
                 {
-                    if (!DidSpawnYet.ContainsKey(enemy.enemyType))
-                    {
-                        DidSpawnYet.Add(enemy.enemyType, false);
-                    }
+                    DidSpawnYet.TryAdd(enemy.enemyType, false);
 
                     if (!EnemyAppearances.ContainsKey(enemy.enemyType)) // enemy hasn't been saved to the dict this session
                     {
-                        if (EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName)) // the string version has it (save data)
+                        if (EnemyAppearanceString.TryGetValue(enemy.enemyType.enemyName, out int savedEnemyAppearance)) // the string version has it (save data)
                         {
-                            EnemyAppearances.Add(enemy.enemyType, EnemyAppearanceString[enemy.enemyType.enemyName]); // creates the dict from the saved data
-                            CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {EnemyAppearances[enemy.enemyType]}");
+                            EnemyAppearances.Add(enemy.enemyType, savedEnemyAppearance); // creates the dict from the saved data
+                            CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {savedEnemyAppearance}");
                         }
                         else // not in the string version (no save data)
                         {
@@ -332,10 +320,7 @@ namespace CentralConfig
                             // CentralConfig.instance.mls.LogInfo($"Added new Enemy Key: {enemy.enemyType.enemyName}");
                         }
                     }
-                    if (!EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName))
-                    {
-                        EnemyAppearanceString.Add(enemy.enemyType.enemyName, EnemyAppearances[enemy.enemyType]);
-                    }
+                    EnemyAppearanceString.TryAdd(enemy.enemyType.enemyName, EnemyAppearances[enemy.enemyType]);
 
                     if (!DidSpawnYet[enemy.enemyType])
                     {
@@ -365,7 +350,7 @@ namespace CentralConfig
         [HarmonyPatch(typeof(StartOfRound), "PassTimeToNextDay")]
         public static class UpdateDungeonDictionary
         {
-            static void Postfix()
+            private static void Postfix()
             {
                 if (!CentralConfig.SyncConfig.DungeonShuffler || !NetworkManager.Singleton.IsHost || LevelManager.CurrentExtendedLevel.NumberlessPlanetName == "Gordion")
                 {
@@ -382,10 +367,10 @@ namespace CentralConfig
 
                         if (!DungeonAppearances.ContainsKey(flow.extendedDungeonFlow))
                         {
-                            if (DungeonAppearanceString.ContainsKey(DungeonName))
+                            if (DungeonAppearanceString.TryGetValue(DungeonName, out int savedDungeonAppearance))
                             {
-                                DungeonAppearances.Add(flow.extendedDungeonFlow, DungeonAppearanceString[DungeonName]);
-                                CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {DungeonName}, Days: {DungeonAppearances[flow.extendedDungeonFlow]}");
+                                DungeonAppearances.Add(flow.extendedDungeonFlow, savedDungeonAppearance);
+                                CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {DungeonName}, Days: {savedDungeonAppearance}");
                             }
                             else
                             {
@@ -394,10 +379,7 @@ namespace CentralConfig
                                 // CentralConfig.instance.mls.LogInfo($"Added new Dungeon Key: {DungeonName}");
                             }
                         }
-                        if (!DungeonAppearanceString.ContainsKey(DungeonName))
-                        {
-                            DungeonAppearanceString.Add(DungeonName, DungeonAppearances[flow.extendedDungeonFlow]);
-                        }
+                        DungeonAppearanceString.TryAdd(DungeonName, DungeonAppearances[flow.extendedDungeonFlow]);
 
                         if (flow.extendedDungeonFlow == lastdungeon)
                         {
@@ -457,7 +439,7 @@ namespace CentralConfig
         [HarmonyPatch(typeof(StartOfRound), "PassTimeToNextDay")]
         public static class SaveShuffleDataStrings
         {
-            static void Postfix()
+            private static void Postfix()
             {
                 if (MiscConfig.CreateMiscConfig.ShuffleSave != null)
                 {

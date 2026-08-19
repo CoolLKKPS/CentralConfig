@@ -110,13 +110,13 @@ namespace CentralConfig
             float scrapvaluemultiplier = 0.4f;
             if (CentralConfig.SyncConfig.DoScrapOverrides)
             {
-                if (WaitForMoonsToRegister.CreateMoonConfig.ScrapValueMultiplier.ContainsKey(LevelManager.CurrentExtendedLevel))
-                    scrapvaluemultiplier *= WaitForMoonsToRegister.CreateMoonConfig.ScrapValueMultiplier[LevelManager.CurrentExtendedLevel];
+                if (WaitForMoonsToRegister.CreateMoonConfig.ScrapValueMultiplier.TryGetValue(LevelManager.CurrentExtendedLevel, out var scrapValueMultiplierEntry))
+                    scrapvaluemultiplier *= scrapValueMultiplierEntry;
             }
             if (CentralConfig.SyncConfig.DoScrapWeatherInjections)
             {
-                if (WaitForWeathersToRegister.CreateWeatherConfig.WeatherScrapValueMultiplier.ContainsKey(weatherName))
-                    scrapvaluemultiplier *= WaitForWeathersToRegister.CreateWeatherConfig.WeatherScrapValueMultiplier[weatherName];
+                if (WaitForWeathersToRegister.CreateWeatherConfig.WeatherScrapValueMultiplier.TryGetValue(weatherName, out var weatherScrapValueMultiplierEntry))
+                    scrapvaluemultiplier *= weatherScrapValueMultiplierEntry;
             }
             else if (WRCompatibility.enabled)
             {

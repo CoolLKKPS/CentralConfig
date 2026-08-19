@@ -148,7 +148,7 @@ namespace CentralConfig
                 CentralConfig.HarmonyTouch3 = true;
             }
         }
-        static void Prefix()
+        private static void Prefix()
         {
             CentralConfig.ConfigFile4 = new CreateTagConfig(CentralConfig.instance.Config);
         }
@@ -157,7 +157,7 @@ namespace CentralConfig
     [HarmonyPriority(100)]
     public class FrApplyTag
     {
-        static void Postfix()
+        private static void Postfix()
         {
             ApplyTagConfig applyConfig = new ApplyTagConfig();
             applyConfig.UpdateTagData();
@@ -230,7 +230,7 @@ namespace CentralConfig
     [HarmonyPriority(666)]
     public class EnactTagInjections
     {
-        static void Prefix()
+        private static void Prefix()
         {
             if (!NetworkManager.Singleton.IsHost)
             {

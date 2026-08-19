@@ -73,7 +73,7 @@ namespace CentralConfig
 
         public static GeneralConfig SyncConfig;
 
-        void Awake()
+        private void Awake()
         {
             instance = this;
             DontDestroyOnLoad(this);

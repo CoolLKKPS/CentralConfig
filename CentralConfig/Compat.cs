@@ -14,10 +14,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("mrov.WeatherRegistry");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("mrov.WeatherRegistry");
                 return (bool)_enabled;
             }
         }
@@ -46,10 +43,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("giosuel.Imperium");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("giosuel.Imperium");
                 return (bool)_enabled;
             }
         }
@@ -68,10 +62,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("LCNoPropsLost");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("LCNoPropsLost");
                 return (bool)_enabled;
             }
         }
@@ -84,10 +75,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kirpichyov.SaveShipItemsOnDeath");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kirpichyov.SaveShipItemsOnDeath");
                 return (bool)_enabled;
             }
         }
@@ -100,10 +88,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Bob123.LCM_KeepScrap");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Bob123.LCM_KeepScrap");
                 return (bool)_enabled;
             }
         }
@@ -116,10 +101,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("NoDeathDespawn");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("NoDeathDespawn");
                 return (bool)_enabled;
             }
         }
@@ -132,10 +114,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("KeepScrap");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("KeepScrap");
                 return (bool)_enabled;
             }
         }
@@ -148,10 +127,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kyxino.LethalUtils");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kyxino.LethalUtils");
                 return (bool)_enabled;
             }
         }
@@ -171,10 +147,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("me.loaforc.facilitymeltdown");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("me.loaforc.facilitymeltdown");
                 return (bool)_enabled;
             }
         }
@@ -187,10 +160,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Xilef.LethalBestiary");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Xilef.LethalBestiary");
                 return (bool)_enabled;
             }
         }
@@ -216,10 +186,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Chaos.Diversity");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Chaos.Diversity");
                 return (bool)_enabled;
             }
         }
@@ -243,10 +210,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Pinta.PintoBoy");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Pinta.PintoBoy");
                 return (bool)_enabled;
             }
         }
@@ -284,10 +248,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kittenji.FootballEntity");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Kittenji.FootballEntity");
                 return (bool)_enabled;
             }
         }
@@ -311,10 +272,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("x753.Peepers");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("x753.Peepers");
                 return (bool)_enabled;
             }
         }
@@ -338,10 +296,7 @@ namespace CentralConfig
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("nomnomab.rollinggiant");
-                }
+                _enabled ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("nomnomab.rollinggiant");
                 return (bool)_enabled;
             }
         }

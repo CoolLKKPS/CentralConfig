@@ -125,7 +125,7 @@ namespace CentralConfig
 
         public static List<string> SplitStringsByDaComma(string newInputString)
         {
-            return newInputString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            return newInputString.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
         }
         /*public static List<StringWithRarity> ConvertStringToStringWithRarityList(string newInputString, Vector2 clampRarity)
         {
@@ -174,8 +174,8 @@ namespace CentralConfig
                 }
             }
 
-            if (returnString.Contains(",") && returnString.LastIndexOf(",") == (returnString.Length - 1))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.Contains(',') && returnString.LastIndexOf(',') == (returnString.Length - 1))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (returnString == string.Empty)
                 returnString = "Default Values Were Empty";
@@ -201,10 +201,9 @@ namespace CentralConfig
                 {
                     var EnemyName = parts[0].Trim();
                     EnemyName = CauterizeString(EnemyName);
-                    int Rarity;
                     bool added = false;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after EnemyName entry {EnemyName}");
                         Rarity = 0;
@@ -314,10 +313,10 @@ namespace CentralConfig
             {
                 if (!EnemyShuffler.EnemyAppearances.ContainsKey(enemy.enemyType))
                 {
-                    if (ShuffleSaver.EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName))
+                    if (ShuffleSaver.EnemyAppearanceString.TryGetValue(enemy.enemyType.enemyName, out int savedEnemyAppearance))
                     {
-                        EnemyShuffler.EnemyAppearances.Add(enemy.enemyType, ShuffleSaver.EnemyAppearanceString[enemy.enemyType.enemyName]);
-                        CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {EnemyShuffler.EnemyAppearances[enemy.enemyType]}");
+                        EnemyShuffler.EnemyAppearances.Add(enemy.enemyType, savedEnemyAppearance);
+                        CentralConfig.instance.mls.LogInfo($"Remembered saved Enemy Key: {enemy.enemyType.enemyName}, Days: {savedEnemyAppearance}");
                     }
                     else
                     {
@@ -326,10 +325,7 @@ namespace CentralConfig
                         // CentralConfig.instance.mls.LogInfo($"Added new Enemy Key: {enemy.enemyType.enemyName}");
                     }
                 }
-                if (!ShuffleSaver.EnemyAppearanceString.ContainsKey(enemy.enemyType.enemyName))
-                {
-                    ShuffleSaver.EnemyAppearanceString.Add(enemy.enemyType.enemyName, EnemyShuffler.EnemyAppearances[enemy.enemyType]);
-                }
+                ShuffleSaver.EnemyAppearanceString.TryAdd(enemy.enemyType.enemyName, EnemyShuffler.EnemyAppearances[enemy.enemyType]);
 
                 int LastAppearance = EnemyShuffler.EnemyAppearances[enemy.enemyType];
                 int multiplier = ShuffleSaver.enemyrandom.Next(MiscConfig.CreateMiscConfig.EnemyShuffleRandomMin, MiscConfig.CreateMiscConfig.EnemyShuffleRandomMax + 1);
@@ -406,7 +402,7 @@ namespace CentralConfig
                     if (OptRarity.Length == 2)
                     {
                         originalName = OptRarity[0].Trim();
-                        int.TryParse(OptRarity[1].Trim(), out rarityReplacement);
+                        _ = int.TryParse(OptRarity[1].Trim(), out rarityReplacement);
                     }
                     else
                     {
@@ -417,7 +413,7 @@ namespace CentralConfig
                     if (ReplaceChance.Length == 2)
                     {
                         replacementName = ReplaceChance[0].Trim();
-                        int.TryParse(ReplaceChance[1].Trim(), out chanceToReplace);
+                        _ = int.TryParse(ReplaceChance[1].Trim(), out chanceToReplace);
                     }
                     else
                     {
@@ -519,9 +515,8 @@ namespace CentralConfig
                 if (parts.Length == 2)
                 {
                     var EnemyName = parts[0].Trim();
-                    float multiplier;
 
-                    if (!float.TryParse(parts[1].Trim(), out multiplier))
+                    if (!float.TryParse(parts[1].Trim(), out float multiplier))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Multiplier: {parts[1].Trim()} after EnemyName entry {EnemyName}");
                         multiplier = 1f;
@@ -598,8 +593,8 @@ namespace CentralConfig
                     }
                 }
             }
-            if (returnString.Contains("~") && returnString.LastIndexOf("~") == (returnString.Length - 1))
-                returnString = returnString.Remove(returnString.LastIndexOf("~"), 1);
+            if (returnString.Contains('~') && returnString.LastIndexOf('~') == (returnString.Length - 1))
+                returnString = returnString.Remove(returnString.LastIndexOf('~'), 1);
 
             if (returnString == string.Empty)
                 returnString = "Default Values Were Empty";
@@ -621,7 +616,7 @@ namespace CentralConfig
 
                     if (startIndex != -1)
                     {
-                        int endIndex = BigString.IndexOf("~", startIndex);
+                        int endIndex = BigString.IndexOf('~', startIndex);
                         if (endIndex == -1)
                         {
                             endIndex = BigString.Length;
@@ -701,8 +696,8 @@ namespace CentralConfig
                         returnString += LightlyToastString(spawnableItemWithRarity.spawnableItem.itemName) + ":" + spawnableItemWithRarity.rarity.ToString() + ",";
                 }
             }
-            if (returnString.Contains(",") && returnString.LastIndexOf(",") == (returnString.Length - 1))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.Contains(',') && returnString.LastIndexOf(',') == (returnString.Length - 1))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (returnString == string.Empty)
                 returnString = "Default Values Were Empty";
@@ -727,9 +722,8 @@ namespace CentralConfig
                 {
                     var ItemName = parts[0].Trim();
                     ItemName = CauterizeString(ItemName);
-                    int Rarity;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after ItemName entry {ItemName}");
                         Rarity = 0;
@@ -784,10 +778,10 @@ namespace CentralConfig
             {
                 if (!ScrapShuffler.ScrapAppearances.ContainsKey(item.spawnableItem))
                 {
-                    if (ShuffleSaver.ScrapAppearanceString.ContainsKey(item.spawnableItem.itemName))
+                    if (ShuffleSaver.ScrapAppearanceString.TryGetValue(item.spawnableItem.itemName, out int savedScrapAppearance))
                     {
-                        ScrapShuffler.ScrapAppearances.Add(item.spawnableItem, ShuffleSaver.ScrapAppearanceString[item.spawnableItem.itemName]);
-                        CentralConfig.instance.mls.LogInfo($"Remembered saved Item Key: {item.spawnableItem.itemName}, Days: {ScrapShuffler.ScrapAppearances[item.spawnableItem]}");
+                        ScrapShuffler.ScrapAppearances.Add(item.spawnableItem, savedScrapAppearance);
+                        CentralConfig.instance.mls.LogInfo($"Remembered saved Item Key: {item.spawnableItem.itemName}, Days: {savedScrapAppearance}");
                     }
                     else
                     {
@@ -796,10 +790,7 @@ namespace CentralConfig
                         // CentralConfig.instance.mls.LogInfo($"Added new Item Key: {item.spawnableItem.itemName}");
                     }
                 }
-                if (!ShuffleSaver.ScrapAppearanceString.ContainsKey(item.spawnableItem.itemName))
-                {
-                    ShuffleSaver.ScrapAppearanceString.Add(item.spawnableItem.itemName, ScrapShuffler.ScrapAppearances[item.spawnableItem]);
-                }
+                ShuffleSaver.ScrapAppearanceString.TryAdd(item.spawnableItem.itemName, ScrapShuffler.ScrapAppearances[item.spawnableItem]);
 
                 int LastAppearance = ScrapShuffler.ScrapAppearances[item.spawnableItem];
                 int multiplier = ShuffleSaver.scraprandom.Next(MiscConfig.CreateMiscConfig.ScrapShuffleRandomMin, MiscConfig.CreateMiscConfig.ScrapShuffleRandomMax + 1); // not just '+ x' but + 'x * (config min/max)' 
@@ -880,9 +871,9 @@ namespace CentralConfig
                 returnString = "None," + returnString;
             }
 
-            if (returnString.Contains(",") && returnString.LastIndexOf(",") == (returnString.Length - 1))
+            if (returnString.Contains(',') && returnString.LastIndexOf(',') == (returnString.Length - 1))
             {
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
             }
 
             return returnString;
@@ -932,8 +923,8 @@ namespace CentralConfig
                 }
             }
 
-            if (returnString.EndsWith(","))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.EndsWith(','))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (string.IsNullOrEmpty(returnString))
                 returnString = "Default Values Were Empty";
@@ -995,8 +986,8 @@ namespace CentralConfig
                     TagNumber++;
                 }
             }
-            if (returnString.EndsWith(","))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.EndsWith(','))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (string.IsNullOrEmpty(returnString))
                 returnString = "Default Values Were Empty";
@@ -1033,10 +1024,10 @@ namespace CentralConfig
 
             if (!DungeonShuffler.DungeonAppearances.ContainsKey(dungeonflow))
             {
-                if (ShuffleSaver.DungeonAppearanceString.ContainsKey(flowName))
+                if (ShuffleSaver.DungeonAppearanceString.TryGetValue(flowName, out int savedDungeonAppearance))
                 {
-                    DungeonShuffler.DungeonAppearances.Add(dungeonflow, ShuffleSaver.DungeonAppearanceString[flowName]);
-                    CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {flowName}, Days: {DungeonShuffler.DungeonAppearances[dungeonflow]}");
+                    DungeonShuffler.DungeonAppearances.Add(dungeonflow, savedDungeonAppearance);
+                    CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {flowName}, Days: {savedDungeonAppearance}");
                 }
                 else
                 {
@@ -1045,10 +1036,7 @@ namespace CentralConfig
                     // CentralConfig.instance.mls.LogInfo($"Added new Dungeon Key: {flowName}");
                 }
             }
-            if (!ShuffleSaver.DungeonAppearanceString.ContainsKey(flowName))
-            {
-                ShuffleSaver.DungeonAppearanceString.Add(flowName, DungeonShuffler.DungeonAppearances[dungeonflow]);
-            }
+            ShuffleSaver.DungeonAppearanceString.TryAdd(flowName, DungeonShuffler.DungeonAppearances[dungeonflow]);
 
             int LastAppearance = DungeonShuffler.DungeonAppearances[dungeonflow];
             foreach (StringWithRarity String in strings)
@@ -1102,10 +1090,10 @@ namespace CentralConfig
 
             if (!DungeonShuffler.DungeonAppearances.ContainsKey(dungeonflow))
             {
-                if (ShuffleSaver.DungeonAppearanceString.ContainsKey(flowName))
+                if (ShuffleSaver.DungeonAppearanceString.TryGetValue(flowName, out int savedDungeonAppearance))
                 {
-                    DungeonShuffler.DungeonAppearances.Add(dungeonflow, ShuffleSaver.DungeonAppearanceString[flowName]);
-                    CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {flowName}, Days: {DungeonShuffler.DungeonAppearances[dungeonflow]}");
+                    DungeonShuffler.DungeonAppearances.Add(dungeonflow, savedDungeonAppearance);
+                    CentralConfig.instance.mls.LogInfo($"Remembered saved Dungeon Key: {flowName}, Days: {savedDungeonAppearance}");
                 }
                 else
                 {
@@ -1114,10 +1102,7 @@ namespace CentralConfig
                     // CentralConfig.instance.mls.LogInfo($"Added new Dungeon Key: {flowName}");
                 }
             }
-            if (!ShuffleSaver.DungeonAppearanceString.ContainsKey(flowName))
-            {
-                ShuffleSaver.DungeonAppearanceString.Add(flowName, DungeonShuffler.DungeonAppearances[dungeonflow]);
-            }
+            ShuffleSaver.DungeonAppearanceString.TryAdd(flowName, DungeonShuffler.DungeonAppearances[dungeonflow]);
 
             int LastAppearance = DungeonShuffler.DungeonAppearances[dungeonflow];
             foreach (Vector2WithRarity Vector in vectors)
@@ -1184,8 +1169,8 @@ namespace CentralConfig
                 if (name.Rarity > 0 && !rmlist.Contains(CauterizeString(name.Name)))
                     returnString += name.Name + ":" + name.Rarity.ToString() + ",";
 
-            if (returnString.Contains(",") && returnString.LastIndexOf(",") == (returnString.Length - 1))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.Contains(',') && returnString.LastIndexOf(',') == (returnString.Length - 1))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (returnString == string.Empty)
                 returnString = "Default Values Were Empty";
@@ -1208,9 +1193,8 @@ namespace CentralConfig
                 if (parts.Length == 2)
                 {
                     var ModName = parts[0].Trim();
-                    int Rarity;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after ModName entry {ModName}");
                         Rarity = 0;
@@ -1248,9 +1232,8 @@ namespace CentralConfig
                 if (parts.Length == 2)
                 {
                     var TagName = parts[0].Trim();
-                    int Rarity;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after TagName entry {TagName}");
                         Rarity = 0;
@@ -1291,9 +1274,8 @@ namespace CentralConfig
                 if (parts.Length == 2)
                 {
                     var PlanetName = parts[0].Trim();
-                    int Rarity;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after PlanetName entry {PlanetName}");
                         Rarity = 0;
@@ -1338,8 +1320,8 @@ namespace CentralConfig
                 if (vector2withRarity.Rarity > 0)
                     returnString += vector2withRarity.Min + "-" + vector2withRarity.Max + ":" + vector2withRarity.Rarity + ",";
 
-            if (returnString.Contains(",") && returnString.LastIndexOf(",") == (returnString.Length - 1))
-                returnString = returnString.Remove(returnString.LastIndexOf(","), 1);
+            if (returnString.Contains(',') && returnString.LastIndexOf(',') == (returnString.Length - 1))
+                returnString = returnString.Remove(returnString.LastIndexOf(','), 1);
 
             if (returnString == string.Empty)
                 returnString = "Default Values Were Empty";
@@ -1362,9 +1344,8 @@ namespace CentralConfig
                 if (parts.Length == 2)
                 {
                     var RouteRange = parts[0].Trim();
-                    int Rarity;
 
-                    if (!int.TryParse(parts[1].Trim(), out Rarity))
+                    if (!int.TryParse(parts[1].Trim(), out int Rarity))
                     {
                         CentralConfig.instance.mls.LogInfo($"Cannot Parse Rarity: {parts[1].Trim()} after RouteRange entry {RouteRange}");
                         Rarity = 0;
@@ -1373,15 +1354,12 @@ namespace CentralConfig
                     var duos = RouteRange.Split('-');
                     if (duos.Length == 2)
                     {
-                        int LowerRange;
-                        int UpperRange;
-
-                        if (!int.TryParse(duos[0].Trim(), out LowerRange))
+                        if (!int.TryParse(duos[0].Trim(), out int LowerRange))
                         {
                             CentralConfig.instance.mls.LogInfo($"Cannot Parse LowerRange: {parts[1].Trim()} after RouteRange entry {RouteRange}");
                             LowerRange = 0;
                         }
-                        if (!int.TryParse(duos[1].Trim(), out UpperRange))
+                        if (!int.TryParse(duos[1].Trim(), out int UpperRange))
                         {
                             CentralConfig.instance.mls.LogInfo($"Cannot Parse UpperRange: {parts[1].Trim()} after RouteRange entry {RouteRange}");
                             UpperRange = 0;
@@ -1474,8 +1452,8 @@ namespace CentralConfig
             for (int i = 0; i < curve.length; i++)
             {
                 Keyframe key = curve[i];
-                float originalValue = key.value;
-                key.value = key.value * multiplier;
+                // float originalValue = key.value;
+                key.value *= multiplier;
                 keyframes[i] = key;
 
                 // CentralConfig.instance.mls.LogInfo($"{LevelName} {TypeOf} Keyframe {i}: Original Y-Value = {originalValue}, New Y-Value = {key.value}");
@@ -1523,8 +1501,8 @@ namespace CentralConfig
             for (int i = 0; i < curve.length; i++)
             {
                 Keyframe key = curve[i];
-                float originalTime = key.time;
-                key.time = key.time / scaleFactor;
+                // float originalTime = key.time;
+                key.time /= scaleFactor;
                 keyframes[i] = key;
 
                 // CentralConfig.instance.mls.LogInfo($"{LevelName} {TypeOf} - Keyframe {i}: Original X-Value = {originalTime}, New X-Value = {key.time}");
@@ -1542,7 +1520,7 @@ namespace CentralConfig
         [HarmonyPatch(typeof(HangarShipDoor), "Start")]
         public static class FlattenCurves
         {
-            static void Postfix()
+            private static void Postfix()
             {
                 if (!NetworkManager.Singleton.IsHost || !CentralConfig.SyncConfig.FlattenCurves)
                 {
@@ -1602,25 +1580,25 @@ namespace CentralConfig
     [HarmonyPriority(777)]
     public class ResetEnemyAndScrapLists
     {
-        static void Prefix()
+        private static void Prefix()
         {
             string PlanetName = LevelManager.CurrentExtendedLevel.NumberlessPlanetName;
 
             if (NetworkManager.Singleton.IsHost && (CentralConfig.SyncConfig.EnemyShuffle || CentralConfig.SyncConfig.DoEnemyWeatherInjections || CentralConfig.SyncConfig.DoEnemyTagInjections || CentralConfig.SyncConfig.DoEnemyInjectionsByDungeon))
             {
-                if (OriginalEnemyAndScrapLists.OriginalIntLists.ContainsKey(PlanetName) && OriginalEnemyAndScrapLists.OriginalDayLists.ContainsKey(PlanetName) && OriginalEnemyAndScrapLists.OriginalNoxLists.ContainsKey(PlanetName))
+                if (OriginalEnemyAndScrapLists.OriginalIntLists.TryGetValue(PlanetName, out var originalIntList) && OriginalEnemyAndScrapLists.OriginalDayLists.TryGetValue(PlanetName, out var originalDayList) && OriginalEnemyAndScrapLists.OriginalNoxLists.TryGetValue(PlanetName, out var originalNoxList))
                 {
-                    LevelManager.CurrentExtendedLevel.SelectableLevel.Enemies = OriginalEnemyAndScrapLists.OriginalIntLists[PlanetName];
-                    LevelManager.CurrentExtendedLevel.SelectableLevel.DaytimeEnemies = OriginalEnemyAndScrapLists.OriginalDayLists[PlanetName];
-                    LevelManager.CurrentExtendedLevel.SelectableLevel.OutsideEnemies = OriginalEnemyAndScrapLists.OriginalNoxLists[PlanetName];
+                    LevelManager.CurrentExtendedLevel.SelectableLevel.Enemies = originalIntList;
+                    LevelManager.CurrentExtendedLevel.SelectableLevel.DaytimeEnemies = originalDayList;
+                    LevelManager.CurrentExtendedLevel.SelectableLevel.OutsideEnemies = originalNoxList;
                     CentralConfig.instance.mls.LogInfo("Reverted Enemy lists for: " + PlanetName);
                 }
             }
             if (NetworkManager.Singleton.IsHost && (CentralConfig.SyncConfig.ScrapShuffle || CentralConfig.SyncConfig.DoScrapWeatherInjections || CentralConfig.SyncConfig.DoScrapTagInjections || CentralConfig.SyncConfig.DoScrapInjectionsByDungeon))
             {
-                if (OriginalEnemyAndScrapLists.OriginalItemLists.ContainsKey(PlanetName))
+                if (OriginalEnemyAndScrapLists.OriginalItemLists.TryGetValue(PlanetName, out var originalItemList))
                 {
-                    LevelManager.CurrentExtendedLevel.SelectableLevel.spawnableScrap = OriginalEnemyAndScrapLists.OriginalItemLists[PlanetName];
+                    LevelManager.CurrentExtendedLevel.SelectableLevel.spawnableScrap = originalItemList;
                     CentralConfig.instance.mls.LogInfo("Reverted Scrap list for: " + PlanetName);
                 }
             }
@@ -1630,7 +1608,7 @@ namespace CentralConfig
     [HarmonyPriority(676)]
     public class FetchEnemyAndScrapLists
     {
-        static void Prefix()
+        private static void Prefix()
         {
             string PlanetName = LevelManager.CurrentExtendedLevel.NumberlessPlanetName;
 
