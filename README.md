@@ -1,4 +1,5 @@
-![icon](https://github.com/user-attachments/assets/73472794-220b-44ad-92f9-57ede5151c72)
+# This is original made by SillySquad
+https://thunderstore.io/c/lethal-company/p/SillySquad/CentralConfig
 
 CentralConfig is a mod for Lethal Company designed to help organize and set config values in one place. Initially intended as a backup for when/if LLL removes its config, it now includes numerous requested functions and miscellaneous fixes and tweaks for both the base game and LLL.
 
