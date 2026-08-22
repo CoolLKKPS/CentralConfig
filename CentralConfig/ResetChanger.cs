@@ -50,9 +50,9 @@ namespace CentralConfig
                 if (CentralConfig.instance != null)
                 {
                     if (WasLastHost)
-                        CentralConfig.instance.mls.LogInfo("You hosted last game");
+                        CentralConfig.instance.mls.LogDebug("You hosted last game");
                     else
-                        CentralConfig.instance.mls.LogInfo("You did not host last game");
+                        CentralConfig.instance.mls.LogDebug("You did not host last game");
                 }
                 if (WasLastHost)
                 {
@@ -135,7 +135,7 @@ namespace CentralConfig
                 IncreaseHiveValue.Counter = 0;
 
                 if (CentralConfig.instance != null)
-                    CentralConfig.instance.mls.LogInfo("Reset enemy/scrap lists for all moons.");
+                    CentralConfig.instance.mls.LogDebug("Reset enemy/scrap lists for all moons.");
             }
         }
     }
